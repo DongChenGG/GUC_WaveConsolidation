@@ -1,4 +1,4 @@
-# WMS 放单助手 v0.3.0
+# WMS 放单助手 v0.3.1
 
 此版本支持真实 Wave Consolidation，选择 picking strategy、Not Operated，然后点击最终 OK。需要 Windows x64、网络和 WMS 账号，不需要 Python 或 GPT。
 
@@ -32,3 +32,9 @@ Un solo EXE admite chino y español. Seleccione Español arriba a la derecha; el
 ## 构建
 
 源码在 `WMS-Wave-Assistant-source.zip`。解压后 Windows 运行 `Build-Windows-EXE.bat`。GitHub Actions 在 Windows 构建，运行规则测试、本地模拟弹窗测试及内嵌 Chromium 启动测试。Release EXE 内置 Python 和 Chromium。
+
+### v0.3.1 修复 / Corrección
+
+修复 Include 文字覆盖内部输入框导致的点击超时；点击 Auxo 可见选择区域，并将选项限定到对应控件的下拉列表。新增复现覆盖层、多选及精确选项测试。
+
+Se corrige el tiempo de espera al pulsar el campo cubierto por Include. Se pulsa la superficie visible del selector y se buscan opciones solo en su lista correspondiente.
