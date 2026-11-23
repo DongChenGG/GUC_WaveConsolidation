@@ -1,82 +1,28 @@
-# WMS 放单助手 v0.1
+# WMS 放单助手 v0.2.0
 
-这是可独立运行的 **Python + Playwright 只读试运行原型**，不需要 GPT 或 Codex 保持打开。需要联网访问 WMS。
+此版本支持真实 Wave Consolidation，选择 picking strategy、Not Operated，然后点击最终 OK。需要 Windows x64、网络和 WMS 账号，不需要 Python 或 GPT。
 
-## 此版本能做什么
+## 使用
 
-- 预置用户定义的 30 个阶段，逐阶段询问开始或暂缓。
-- 精确配置 Pallet 124–130、Box 131–178、Bin 179–191；混合边界巷道保留两半。
-- 普通货架按三个完整巷道起步；在数量口径与仓区语义已核验的 Single 预览中，不足阈值则逐巷道扩展。尾批不足记录为留到后续。
-- 混区阶段查询整个指定范围，L/H 分开。
-- 设置 Zone / Virtual zone 匹配方式、最低数量、起始巷道数；阶段名称、虚拟区和策略可通过编辑按钮修改。
-- 独立 Chromium 浏览器登录、填写筛选并查询；查询记录导出 JSON、本地日志。
-- 默认纽约时区的 09:00 爆品提醒、12:00 截单收尾提醒。
+下载 Release 中的 EXE，双击运行。在本地管理页打开专用 WMS 浏览器并登录。先用预览核对筛选条件；核验 Zone Info / Virtual zone 匹配语义后勾选对应配置并保存。选择阶段，点击“正式汇波”，确认本阶段执行。查询预览按钮仍可使用。
 
-## 明确不做什么
+每次提交前写入本地提交记录，点击最终 OK 后等待新出现的成功提示及策略弹窗关闭，再进入下一批。提交失败、超时或程序中断会保留锁定记录。需在 WMS 核对波次号和状态后，在管理页记录核对结果并解除锁定；不会自动重试。停止按钮只停止后续操作，不能撤销已提交波次。
 
-- **没有创建波次、Confirm Wave、取消波次、修改 WMS 策略的代码路径。** “预览”不是放单。
-- 定时功能当前是提醒，不是自动放单。必须保持程序运行、电脑不休眠；错过时刻不补跑。
-- Multis 的 All 查询包含 Single，无法据此取得真正可放 Multis 总量，所以不自动判断其扩展和放单。
-- 12:00 是开始还是完成时点、同包跨 L/H 的归属、纯区/混区匹配语义尚未核验。当前版本不能承诺 12 点全部放完。
-- 暂存爆品与取消暂存是人工检查点，不会自动创建或取消任何波次。
-- 爆品保留 6–999 筛选范围；不会自动扩大上限。对 >999 的业务处理仍待明确。
-- 生产系统真实登录后查询尚未在此 Python 原型中端到端验证。页面适配基于已观察到的 WMS 控件，界面变化或标签不一致会停止。
+## 范围与限制
 
-## 在其他电脑运行
+- 30 个阶段，每阶段单独开始；普通货架每组三个完整巷道，可配置。
+- Single / Top-selling 不足门槛时逐巷道扩展，尾批默认留到后续。阶段确认卡可勾选收尾，允许低于门槛提交。
+- Multis 的 All 总量包含 Single，不是策略筛选后的数量，因此按固定巷道组汇波，不据此自动扩展。由 Clean-up Multis 策略选择订单。
+- L/H 分开；混区使用整个配置范围。Bin 包含 191，Top-selling 数量范围保持 6–999。
+- 爆品暂存、第 14 步剩余核验、取消暂存仍需人工操作。
+- 定时仍是 09:00 / 12:00 提醒，不是无人值守放单。电脑必须保持运行；不能承诺 12 点全部完成。
+- 正式流程使用精确策略名称和 Not Operated 单选项，页面不匹配会停止，不回退到默认策略。若成功提示不符合识别规则，也会锁定要求人工核对。
+- 生产 WMS 端到端尚未验证；由使用者进行实际环境测试。自动测试使用本地模拟页面，不操作生产订单。
 
-这是跨平台源码分发包，不是已经分别编译好的 Windows EXE / macOS APP。
+## 数据
 
-1. 解压整个文件夹，不要只复制启动文件。
-2. 安装 Python 3.10 或更新版本（建议 3.11/3.12）。Windows 安装 Python 官方版本，确保 `py` 可用。
-3. Windows 双击 `Start-Windows.bat`；macOS 双击 `Start-Mac.command`。
-4. 首次启动会创建 `.venv`、安装依赖并下载 Playwright Chromium，需联网。macOS 如文件无执行权限，在终端运行 `sh Start-Mac.command`。
-5. 程序打开本地管理页 `http://127.0.0.1:8765`。点击“打开 WMS 浏览器 / 登录”，在新的 Chromium 窗口自行登录。
-6. 选择一个阶段，核对参数，点击“开始本阶段预览”。实际汇波仍需人工在 WMS 进行。
-7. 停止程序：启动终端中按 Ctrl+C。不要同时打开两个本程序实例。
+本机配置、日志、登录状态和待核对记录保存在 `~/.wms-wave-assistant/`。不要共享 browser-profile。新版本复用本机配置。一次只运行一个实例，升级前退出旧程序。
 
-如通过终端安装：
+## 构建
 
-```sh
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m playwright install chromium --no-shell
-.venv/bin/python run.py
-```
-
-Windows 对应使用 `.venv\Scripts\python.exe`。
-
-需要公司 VPN / 内网时，运行电脑必须具备同样的访问条件。不要将现有浏览器配置目录复制到另一台电脑。
-
-## 数据与配置
-
-默认本机目录：`~/.wms-wave-assistant/`。
-
-- `config.json`：数量门槛、匹配方式、时区和提醒时间。
-- `phases.json`：30 个阶段的可编辑配置。
-- `events.jsonl`：运行事件。
-- `last-results.json`：预览结果，应用当前界面只显示当前进程结果。
-- `browser-profile/`：独立浏览器登录状态；应按账号凭据保护，**不可随分发包共享**。
-
-可用环境变量 `WMS_ASSISTANT_DATA` 改变数据目录。应用只监听 127.0.0.1，配置操作带本次启动的随机校验标记。
-
-### 匹配方式
-
-默认 Include 只是试查初始值，不意味着“纯区”。确认准确的 Zone Info / Virtual zone 逻辑后再勾选“已核验”。该标记也不会启用实际汇波。
-
-第 12/13 步的 L/H 集合由程序生成，单独修改这两步的 `virtual_zones` 不生效。实体区类型范围通过 `zone_types` 控制。全仓阶段是明确的跨地堆/货架例外。
-
-### 可移植打包
-
-当前 ZIP 在 Windows/macOS 上使用各自的启动脚本。无需 GPT，首次需要 Python 与网络安装依赖。
-
-Windows 单文件 EXE 的一键构建入口是 `Build-Windows-EXE.bat`。它内嵌 Python 和 Chromium，构建后在其他 Windows x64 电脑上无需安装依赖。当前 Mac 环境尚未生成 EXE，详细步骤见 [Windows-EXE说明](Windows-EXE说明.md)。附带可选 GitHub Actions 工作流，但未上传或触发远程构建。
-
-## 开发与验证
-
-```sh
-python -m unittest discover -s tests -v
-```
-
-已验证：11 项规则/执行队列测试；Python/前端脚本语法；本地网页打开及阶段确认卡。真实 WMS 提交不在此版本中，未做生产放单测试。
-
-适配器使用官方 Playwright Python：[文档](https://playwright.dev/python/docs/library)。锁定版本：[Playwright 1.58.0](https://pypi.org/project/playwright/1.58.0/)。
+源码在 `WMS-Wave-Assistant-source.zip`。解压后 Windows 运行 `Build-Windows-EXE.bat`。GitHub Actions 在 Windows 构建，运行规则测试、本地模拟弹窗测试及内嵌 Chromium 启动测试。Release EXE 内置 Python 和 Chromium。
