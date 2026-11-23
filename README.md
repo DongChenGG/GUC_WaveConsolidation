@@ -1,40 +1,34 @@
-# WMS 放单助手 v0.3.1
+# WMS Wave Assistant v0.4.0-test
 
-此版本支持真实 Wave Consolidation，选择 picking strategy、Not Operated，然后点击最终 OK。需要 Windows x64、网络和 WMS 账号，不需要 Python 或 GPT。
-
-## 中文 / Español
-
-同一个 EXE 支持中文和西班牙语。右上角选择语言，浏览器记住选择。界面、默认阶段、确认提示和程序消息按所选语言显示；WMS 的策略、区域及匹配选项名称、编辑器中的 JSON 和导出原始记录保持不变，避免改变执行配置。用户自定义名称和外部系统返回的原始错误可能保留原文。
-
-Un solo EXE admite chino y español. Seleccione Español arriba a la derecha; el navegador recuerda su elección. Los nombres de WMS y los datos JSON se conservan sin traducir. Cierre la versión anterior antes de ejecutar esta actualización.
+Windows 桌面测试版 / Versión de prueba para Windows。仅通过 GitHub Actions Artifacts 提供测试包；用户确认发布后才创建 Release。
 
 ## 使用
 
-下载 Release 中的 EXE，双击运行。在本地管理页打开专用 WMS 浏览器并登录。先用预览核对筛选条件；核验 Zone Info / Virtual zone 匹配语义后勾选对应配置并保存。选择阶段，点击“正式汇波”，确认本阶段执行。查询预览按钮仍可使用。
+退出旧 EXE（包括黑色窗口），解压测试包并运行 WMS-Wave-Assistant.exe。助手使用独立桌面窗口，不打开默认浏览器作为管理界面，也不显示控制台。中文 / Español 可在右上角切换并保存在本机。
 
-每次提交前写入本地提交记录，点击最终 OK 后等待新出现的成功提示及策略弹窗关闭，再进入下一批。提交失败、超时或程序中断会保留锁定记录。需在 WMS 核对波次号和状态后，在管理页记录核对结果并解除锁定；不会自动重试。停止按钮只停止后续操作，不能撤销已提交波次。
+点击“登录 / 打开 WMS”并完成登录。选择阶段后点击预览或正式汇波，程序自动进入 Outbound → Wave Consolidation；无需手动移步。未打开 WMS 时也会自动打开；若登录过期，完成登录后再次开始。
 
-## 范围与限制
+- 单独选区（包括 TTGROUND、货架某一类型 L/H）：Zone Info 与 Virtual zone 使用 Totally included。
+- 第 8–13 阶段及配置的多区域交叉选择：使用 Include。
+- 不再需要勾选“仓区匹配语义核验”。旧版设置自动按新规则解释，保留包裹门槛、巷道数量、定时提醒和阶段配置。
+- 所有策略按 Search 后的 Total package 判断；不足门槛时追加完整巷道；范围末尾不足时默认暂留。勾选阶段收尾可放尾批。
+- 正式汇波：picking strategy → Not Operated → 最终 OK。未确认成功时保留提交记录，禁止自动重复提交。
+- 第 14、15、23 阶段仍是人工节点；09:00 / 12:00 仍是程序运行期间的提醒，并非无人值守定时放单。
 
-- 30 个阶段，每阶段单独开始；普通货架每组三个完整巷道，可配置。
-- Multis / Single / Top-selling 统一按每次 Search 后页面 Total package 判断，不足门槛时逐巷道扩展，尾批默认留到后续。阶段确认卡可勾选收尾，允许低于门槛提交。
-- 数量门槛默认 30，可配置。每次追加一个完整巷道后重新 Search，读取新的 Total package；达到门槛才提交。不会扩出当前阶段配置的仓区范围。混区阶段仍按整个范围查询。
-- L/H 分开；混区使用整个配置范围。Bin 包含 191，Top-selling 数量范围保持 6–999。
-- 爆品暂存、第 14 步剩余核验、取消暂存仍需人工操作。
-- 定时仍是 09:00 / 12:00 提醒，不是无人值守放单。电脑必须保持运行；不能承诺 12 点全部完成。
-- 正式流程使用精确策略名称和 Not Operated 单选项，页面不匹配会停止，不回退到默认策略。若成功提示不符合识别规则，也会锁定要求人工核对。
-- 生产 WMS 端到端尚未验证；由使用者进行实际环境测试。自动测试使用本地模拟页面，不操作生产订单。
+助手窗口与受控 WMS 浏览器是两个窗口。WMS 登录和实际操作使用内置 Chromium。助手桌面窗口采用 pywebview / Windows WebView2；需要 Windows x64 和 Microsoft Edge WebView2 Runtime。若电脑缺少 Runtime，请使用 Microsoft 官方安装程序。关闭助手会停止后续任务并关闭受控浏览器；已发出的提交先等待回执或保留待核对记录。
 
-## 数据
+## Español
 
-本机配置、日志、登录状态和待核对记录保存在 `~/.wms-wave-assistant/`。不要共享 browser-profile。新版本复用本机配置。一次只运行一个实例，升级前退出旧程序。
+Cierre la versión anterior y ejecute WMS-Wave-Assistant.exe. El asistente se abre como una aplicación de escritorio independiente. Seleccione Español en la esquina superior derecha.
 
-## 构建
+Inicie sesión en la ventana WMS. Al iniciar una etapa, el programa abre Wave Consolidation automáticamente. Las zonas individuales usan Totally included; las selecciones entre zonas usan Include. No se requiere marcar una verificación manual. Se conservan los umbrales y horarios existentes.
 
-源码在 `WMS-Wave-Assistant-source.zip`。解压后 Windows 运行 `Build-Windows-EXE.bat`。GitHub Actions 在 Windows 构建，运行规则测试、本地模拟弹窗测试及内嵌 Chromium 启动测试。Release EXE 内置 Python 和 Chromium。
+La ventana del asistente y el navegador WMS son independientes. Se requiere Windows x64 con Microsoft Edge WebView2 Runtime. Los horarios son avisos mientras la aplicación está abierta. Las etapas 14, 15 y 23 siguen siendo manuales.
 
-### v0.3.1 修复 / Corrección
+## 验证与构建
 
-修复 Include 文字覆盖内部输入框导致的点击超时；点击 Auxo 可见选择区域，并将选项限定到对应控件的下拉列表。新增复现覆盖层、多选及精确选项测试。
+GitHub Actions 使用 Windows 构建 EXE，运行规则、模拟浏览器、语言和导航测试，随后验证打包 Chromium 与原生桌面窗口。模拟测试不等于真实 WMS 全流程已通过，实际测试由用户完成。测试包位于对应 Actions 运行的 Artifacts。
 
-Se corrige el tiempo de espera al pulsar el campo cubierto por Include. Se pulsa la superficie visible del selector y se buscan opciones solo en su lista correspondiente.
+源码运行：安装 requirements.txt，执行 python run.py。--no-open 可用于本地开发服务。Windows 打包：python build.py。
+
+本机数据默认位于用户目录 .wms-wave-assistant。源码包不包含登录状态、仓库订单或本机配置。
