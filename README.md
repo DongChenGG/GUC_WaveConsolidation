@@ -1,4 +1,4 @@
-# WMS Wave Assistant v0.4.1-test
+# WMS Wave Assistant v0.4.2-test
 
 Windows 桌面测试版 / Versión de prueba para Windows。仅通过 GitHub Actions Artifacts 提供测试包；用户确认发布后才创建 Release。
 
@@ -32,6 +32,13 @@ GitHub Actions 使用 Windows 构建 EXE，运行规则、模拟浏览器、语�
 源码运行：安装 requirements.txt，执行 python run.py。--no-open 可用于本地开发服务。Windows 打包：python build.py。
 
 本机数据默认位于用户目录 .wms-wave-assistant。源码包不包含登录状态、仓库订单或本机配置。
+
+## v0.4.2-test
+
+- 已在真实 WMS 验证到策略下拉框选择 Clean-up Multis、Not Operated 勾选、最终 OK 启用；取消弹窗，未提交真实波次。
+- 修复前置确认与策略弹窗在退出动画中短暂同时存在导致的误报，等待过渡结束后再校验。
+- 深链接被重定向到 Home 时，自动通过 Outbound → Wave → Wave Consolidation 进入。
+- 新增双弹窗延迟退出及菜单导航回归测试；最终提交和成功提示仍须由用户测试。
 
 ## v0.4.1-test
 
