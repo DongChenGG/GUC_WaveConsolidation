@@ -1,6 +1,12 @@
-# WMS 放单助手 v0.2.1
+# WMS 放单助手 v0.3.0
 
 此版本支持真实 Wave Consolidation，选择 picking strategy、Not Operated，然后点击最终 OK。需要 Windows x64、网络和 WMS 账号，不需要 Python 或 GPT。
+
+## 中文 / Español
+
+同一个 EXE 支持中文和西班牙语。右上角选择语言，浏览器记住选择。界面、默认阶段、确认提示和程序消息按所选语言显示；WMS 的策略、区域及匹配选项名称、编辑器中的 JSON 和导出原始记录保持不变，避免改变执行配置。用户自定义名称和外部系统返回的原始错误可能保留原文。
+
+Un solo EXE admite chino y español. Seleccione Español arriba a la derecha; el navegador recuerda su elección. Los nombres de WMS y los datos JSON se conservan sin traducir. Cierre la versión anterior antes de ejecutar esta actualización.
 
 ## 使用
 
