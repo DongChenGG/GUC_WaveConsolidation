@@ -1,4 +1,4 @@
-# WMS Wave Assistant v0.4.0-test
+# WMS Wave Assistant v0.4.1-test
 
 Windows 桌面测试版 / Versión de prueba para Windows。仅通过 GitHub Actions Artifacts 提供测试包；用户确认发布后才创建 Release。
 
@@ -32,3 +32,7 @@ GitHub Actions 使用 Windows 构建 EXE，运行规则、模拟浏览器、语�
 源码运行：安装 requirements.txt，执行 python run.py。--no-open 可用于本地开发服务。Windows 打包：python build.py。
 
 本机数据默认位于用户目录 .wms-wave-assistant。源码包不包含登录状态、仓库订单或本机配置。
+
+## v0.4.1-test
+
+修复 Select pick strategy 标题与下拉占位文字同名导致的严格定位冲突。按弹窗标题定位，并通过策略下拉框精确选项选择，核对选择后再选 Not Operated 单选项和最终 OK。仅供用户测试，未发布 Release。
