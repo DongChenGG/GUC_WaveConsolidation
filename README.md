@@ -1,54 +1,53 @@
-# WMS Wave Assistant v0.4.3-test
+# WMS Wave Assistant v0.5.0-test
 
-Windows 桌面测试版 / Versión de prueba para Windows。仅通过 GitHub Actions Artifacts 提供测试包；用户确认发布后才创建 Release。
+三波自动流程测试版。只提供 GitHub Actions 测试包，尚未发布正式 Release。
 
 ## 使用
 
-退出旧 EXE（包括黑色窗口），解压测试包并运行 WMS-Wave-Assistant.exe。助手使用独立桌面窗口，不打开默认浏览器作为管理界面，也不显示控制台。中文 / Español 可在右上角切换并保存在本机。
+关闭旧 EXE，下载并解压测试包，运行 WMS-Wave-Assistant.exe。点击“登录 WMS”完成登录，并把 **WMS 网页切换为 English**。助手可选中文 / Español。
 
-点击“登录 / 打开 WMS”并完成登录。选择阶段后点击预览或正式汇波，程序自动进入 Outbound → Wave Consolidation；无需手动移步。未打开 WMS 时也会自动打开；若登录过期，完成登录后再次开始。
+选择 **首波、次波或尾波**，点击“开始执行”。无需逐个选择阶段。当前步骤、查询范围和包裹数会显示在时间线与日志里。执行时不要用同一账号从另一窗口创建、确认或取消波次。
 
-- 单独选区（包括 TTGROUND、货架某一类型 L/H）：Zone Info 与 Virtual zone 使用 Totally included。
-- 第 8–13 阶段及配置的多区域交叉选择：使用 Include。
-- 不再需要勾选“仓区匹配语义核验”。旧版设置自动按新规则解释，保留包裹门槛、巷道数量、定时提醒和阶段配置。
-- 所有策略按 Search 后的 Total package 判断；不足门槛时追加完整巷道；范围末尾不足时默认暂留。勾选阶段收尾可放尾批。
-- 正式汇波：picking strategy → Not Operated → 最终 OK。未确认成功时保留提交记录，禁止自动重复提交。
-- 第 14、15、23 阶段仍是人工节点；09:00 / 12:00 仍是程序运行期间的提醒，并非无人值守定时放单。
+- 首波：隔离爆品 6–999 → 暂存所有剩余 Single（One item only、不限制数量）→ 按区域/巷道释放 Multis → 取消 Single 暂存 → 释放 Single 1–3 → 取消爆品暂存 → 按区域/巷道释放尽量接近但不超过 2000 包的爆品。
+- 次波：隔离爆品 → 全部普通 Single → 全部 Multis；爆品保持暂存留到尾波。
+- 尾波：隔离爆品 → 全部普通 Single → 全部 Multis → 取消台账中爆品暂存 → 爆品 6–999 → 剩余检查。超过 999 的数量单独报告，留待人工。
 
-助手窗口与受控 WMS 浏览器是两个窗口。WMS 登录和实际操作使用内置 Chromium。助手桌面窗口采用 pywebview / Windows WebView2；需要 Windows x64 和 Microsoft Edge WebView2 Runtime。若电脑缺少 Runtime，请使用 Microsoft 官方安装程序。关闭助手会停止后续任务并关闭受控浏览器；已发出的提交先等待回执或保留待核对记录。
+普通 Single 释放范围为 1–5，避免在爆品隔离后把超过 999 的组误当普通 Single 放出；首波暂存 Single 仍不限制 Package quantity。
+
+所有正常释放按 TTGROUND、Pallet L/H、Box L/H、Bin L/H 顺序。每批从 3 个完整巷道开始（可调）；头尾段一起选，Search 后 Total package 不足 30 则增加完整巷道，不跨当前区域和高低位。Zone Info 使用 Include，Virtual zone 单区使用 Totally included，同时取交集。Multis 额外运行已定义的混区阶段；Single 和 Top-selling 无混区阶段。全部 Multis、选定 Single 和尾波尾批即使不足门槛也处理。
+
+首波爆品先从数量下限 100 开始只读搜索阈值，上限仍为 999；候选总量超过 2000 时也可提高下限。选定阈值后分区分巷道实际执行，每批重新核对剩余额度。数量变动时暂停或暂留超额批次，不使用任意行截断订单组，因此可能少于 2000。
+
+## 自动核验与异常
+
+提交前读取当前账号的 Wave Confirmation 基线。最终 OK 仅点一次，随后核对新增 wave number、Creator、Created at、来源、Created/Confirmed 状态，以及新增波次包裹合计与本次 Search 数量一致。Initialized/Confirming 不视为完成，Failed/Canceled 等停止。无法排除同账号同时操作的情况，因此执行期间必须避免同账号并发放单。
+
+暂存只保存在本机 round-ledger.json。自动取消仅操作该台账中当前账号、当前仓库的 held 波次；跨次波/尾波沿用仍有效的爆品暂存。Confirmed 波次不会自动取消。取消后等待 Canceled，再检查对应包裹数量回池，不靠固定延时直接继续。
+
+主要等待上限：页面/查询 30 秒、弹窗过渡 12 秒、创建核验 120 秒、取消状态 120 秒、取消回池 120 秒。每个页面查询也有自己的超时。空查询只有在本次 Search 成功且稳定出现 “Total package: -” 与 “No data available” 时才按零包跳过。
+
+任何写入前先落盘 pending 意图；异常后不自动重试。暂停后可“重新核验待处理结果”（只读）。核对完成后，“结束暂停轮次”只结束本机流程，不回滚已创建波次。若仍无法核验，保留锁定与台账并人工检查；不要删除台账绕过锁定。暂停不是从头自动重跑。
+
+收尾会查各 Multis 页签、Single 1–5、Top 6–999 和 >999。跨 L/H、区域未匹配或新到包裹造成残留时暂停并显示数量，不会宣告已清空。该版本不在未定义的跨高低位范围内盲目释放。
+
+## 验证范围
+
+真实 WMS 已检查：Creator 查询、完整 wave number 表格结构、状态枚举、Created 行的 Cancel 入口、巷道和虚拟区名称、空查询结果；此前已走到策略选择、Not Operated 与最终 OK 可用的位置，但未提交。
+
+**没有在真实 WMS 创建或取消测试波次。** 当前可取消波次属于其他账号，未拿它测试。取消弹窗及完整三波写入路径由隔离 HTML / 假浏览器回归测试验证，仍需使用者在实际环境验收。
 
 ## Español
 
-Cierre la versión anterior y ejecute WMS-Wave-Assistant.exe. El asistente se abre como una aplicación de escritorio independiente. Seleccione Español en la esquina superior derecha.
+Cierre la versión anterior, extraiga el ZIP y ejecute el EXE. Inicie sesión en WMS y cambie WMS a English; el asistente permite Español. Elija Primera, Segunda o Final y pulse Ejecutar. Las etapas se ejecutan en orden; cualquier resultado incierto pausa el proceso sin repetir escrituras.
 
-Inicie sesión en la ventana WMS. Al iniciar una etapa, el programa abre Wave Consolidation automáticamente. Las zonas individuales usan Totally included; las selecciones entre zonas usan Include. No se requiere marcar una verificación manual. Se conservan los umbrales y horarios existentes.
+Primera: reservar top 6–999 y Single restantes, liberar Multis por zona/L/H/pasillo, cancelar reservas Single y liberar 1–3, cancelar reservas top y liberar hasta 2000 paquetes top en total. Segunda: reservar top, liberar Single normales y Multis; mantener top reservado. Final: reservar top, liberar Single normales y Multis, cancelar las reservas top registradas y liberar top 6–999. Los grupos superiores a 999 quedan para revisión manual.
 
-La ventana del asistente y el navegador WMS son independientes. Se requiere Windows x64 con Microsoft Edge WebView2 Runtime. Los horarios son avisos mientras la aplicación está abierta. Las etapas 14, 15 y 23 siguen siendo manuales.
+Cada creación se verifica en Wave Confirmation. Solo se cancelan reservas registradas para la misma cuenta y almacén, y se espera su estado Canceled y la devolución de paquetes. No use la misma cuenta simultáneamente en otra ventana. Las pruebas reales de creación y cancelación aún requieren validación del usuario; no se han ejecutado en producción durante el desarrollo.
 
-## 验证与构建
+## 运行与构建
 
-GitHub Actions 使用 Windows 构建 EXE，运行规则、模拟浏览器、语言和导航测试，随后验证打包 Chromium 与原生桌面窗口。模拟测试不等于真实 WMS 全流程已通过，实际测试由用户完成。测试包位于对应 Actions 运行的 Artifacts。
+Windows x64，需 Microsoft Edge WebView2 Runtime。EXE 自带 Python 和 Chromium，助手独立窗口与 WMS 浏览器是两个窗口。无需另装 Python。旧的定时配置仍只是程序运行时提醒，不是无人值守启动三波。
 
-源码运行：安装 requirements.txt，执行 python run.py。--no-open 可用于本地开发服务。Windows 打包：python build.py。
+源码：安装 requirements.txt，python run.py。开发服务：python run.py --no-open。Windows 构建：python build.py；构建运行单元/浏览器模拟测试，验证打包 Chromium 和原生桌面窗口。
 
-本机数据默认位于用户目录 .wms-wave-assistant。源码包不包含登录状态、仓库订单或本机配置。
-
-## v0.4.2-test
-
-- 已在真实 WMS 验证到策略下拉框选择 Clean-up Multis、Not Operated 勾选、最终 OK 启用；取消弹窗，未提交真实波次。
-- 修复前置确认与策略弹窗在退出动画中短暂同时存在导致的误报，等待过渡结束后再校验。
-- 深链接被重定向到 Home 时，自动通过 Outbound → Wave → Wave Consolidation 进入。
-- 新增双弹窗延迟退出及菜单导航回归测试；最终提交和成功提示仍须由用户测试。
-
-## v0.4.1-test
-
-修复 Select pick strategy 标题与下拉占位文字同名导致的严格定位冲突。按弹窗标题定位，并通过策略下拉框精确选项选择，核对选择后再选 Not Operated 单选项和最终 OK。仅供用户测试，未发布 Release。
-
-
-## v0.4.3-test
-- WMS 必须使用 English；助手保留中文/西语，首页明确提示。
-- 顺序：暂存爆品（人工）→ Clean-up Single → Clean-up Multis → 核验剩余 → 取消暂存（人工）→ Top-selling。
-- 默认货架按完整范围一次查询、一次汇波：Pallet 124–131，Box 130–179，Bin 178–191（含完整混合边界巷道）。Zone Info Include 与对应 Virtual zone Totally included 同时筛选取交集；L/H 分开。混区 Virtual zone 保持 Include。
-- 旧本机阶段配置首次升级自动迁移为完整范围；阶段内部 ID 保留以兼容记录，显示步骤按新顺序排列。
-- 点击正式汇波不再弹第二次确认。阶段成功结束后可直接点“下一个”执行下一阶段（不自动连跑）；人工节点显示操作提示，未知提交仍锁定。
-- 未发布 Release，仅提供 Actions 测试包。
+本机数据默认 ~/.wms-wave-assistant；分发包不含登录凭据、波次台账或仓库数据。
