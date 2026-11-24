@@ -1,10 +1,10 @@
-# WMS Wave Assistant v0.7.0-test
+# WMS Wave Assistant v0.7.0
 
-**测试版，不是正式发布。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+**v0.7.0 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
 
-## 放单逻辑思维导图 · v0.7.0-test
+## 放单逻辑思维导图 · v0.7.0
 
-以下描述 **v0.7.0-test 测试版**，不是旧正式版的行为。对应[测试分支源码](https://github.com/DongChenGG/GUC_WaveConsolidation/tree/test/v0.5.3-receipt-resume)与[已通过的 Windows 测试构建](https://github.com/DongChenGG/GUC_WaveConsolidation/actions/runs/45444376846)。本次 README 更新不发布正式版，也不将测试代码合并到默认分支。
+以下描述 **v0.7.0 正式版**。下载请使用 [GitHub Release v0.7.0](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.7.0)，规则不适用于旧版任务的续跑计划。
 
 ### 首波、尾波与 Flex
 
@@ -147,7 +147,7 @@ mindmap
 
 ## 开始
 
-关闭旧版，运行测试版并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
+关闭旧版，运行 v0.7.0并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
 首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
@@ -194,7 +194,7 @@ Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道�
 
 ## Español
 
-Versión de prueba. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
+Versión oficial v0.7.0. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
 
 Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 
