@@ -10,6 +10,13 @@
 
 节点前的编号表示执行顺序；L 是低位，H 是高位。
 
+![wave-plans 思维导图](wave-plans.svg)
+
+[打开大图](wave-plans.svg)
+
+<details>
+<summary>展开 Mermaid 源码</summary>
+
 ```mermaid
 mindmap
   root((WMS 放单助手))
@@ -63,7 +70,16 @@ mindmap
       不自动追加混区、全仓兜底或剩余核验
 ```
 
+</details>
+
 ### 分区、数量门槛与执行方式
+
+![wave-rules 思维导图](wave-rules.svg)
+
+[打开大图](wave-rules.svg)
+
+<details>
+<summary>展开 Mermaid 源码</summary>
 
 ```mermaid
 mindmap
@@ -116,6 +132,8 @@ mindmap
       重新开始建立新任务，保留台账
       继续上次任务沿用原计划和大阶段进度
 ```
+
+</details>
 
 **阅读边界：**
 
