@@ -1,16 +1,25 @@
-# WMS Wave Assistant v0.8.0-test
+# WMS Wave Assistant v0.8.0
 
-**v0.8.0-test 测试版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+**v0.8.0 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
 
-## v0.8.0-test 新功能
+## 台账复盘修复
+
+- 新建 Flex 与继续旧任务分离。旧取消操作重新读取为 Created 时保留锁单，新 Flex 不被旧首波取消流程阻塞；继续任务仍从原节点执行。
+- 新任务准备期间保持所选模式，不再因旧台账跳回首波。
+- 主窗口显示 Top-selling / Single 锁单完整 Wave #、包裹数和最后记录状态；手工操作后的当前状态以 WMS 为准。
+- 保存逐动作时间线、提交查询快照和完成时间；成功后清除历史错误。
+- 爆品先查 6–999，全量在预算内时省去逐级门槛试探。
+- 查询 Total package 与实际成波数量偏差仍需现场核对；本版不保证实际波次恰好达到目标或最低包裹数。
+
+## v0.8.0 新功能
 
 - Flex 每个释放区域可设置目标包裹数：0 不限，30–1000000 为目标。按实际波次累计，暂停后保留进度；超过余额的范围会二分巷道，无法再拆则留置。Ground 无巷道可拆。实时订单变化可能使实际数量超过目标。
 - 黑底、青红错位的原创 W 图标，用于 EXE 和托盘。
 - 点击“悬浮监控”或最小化工作台进入置顶小窗。显示当前节点、目标、已放和剩余；支持暂停、继续、置顶和声音开关。可收进托盘，通过托盘恢复工作台或小窗。
 - 关闭窗口收起到监控/托盘，真正退出请使用托盘的“退出”。任务暂停或完成时发送系统通知。WMS 浏览器可以最小化，但不能关闭；电脑休眠期间不能执行。
-- 这是测试版，不替换 v0.7.1 正式版。自动测试不等于生产 WMS 的实单验证。
+- 本次正式版包含 v0.8.0 测试版功能及后续台账复盘修复。自动测试不等于生产 WMS 的实单验证。
 
-## v0.8.0-test 恢复与页面等待修复
+## v0.8.0 恢复与页面等待修复
 
 - 已在汇波页时等待页面加载，不因 Reset 短暂消失重新导航。
 - 英文判断使用实际表单，不依赖页眉语言按钮；区分页面未就绪、中文界面和登录过期。
@@ -18,9 +27,9 @@
 - 提交结果尚未返回时先接收该次结果，成功后自动进入下一批，避免重复提交。
 - 旧版任务没有保存巷道断点，无法还原旧版未记录的位置；精确小节点恢复适用于本版记录的进度。
 
-## 放单逻辑思维导图 · v0.8.0-test
+## 放单逻辑思维导图 · v0.8.0
 
-以下描述 **v0.8.0-test 测试版**。下载请使用 [GitHub Release v0.8.0-test](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.0-test)，规则不适用于旧版任务的续跑计划。
+以下描述 **v0.8.0 正式版**。下载请使用 [GitHub Release v0.8.0](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.0)，规则不适用于旧版任务的续跑计划。
 
 ### 首波、尾波与 Flex
 
@@ -163,7 +172,7 @@ mindmap
 
 ## 开始
 
-关闭旧版，运行 v0.8.0-test并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
+关闭旧版，运行 v0.8.0并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
 首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
@@ -210,7 +219,7 @@ Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道�
 
 ## Español
 
-Versión oficial v0.8.0-test. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
+Versión oficial v0.8.0. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
 
 Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 
