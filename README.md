@@ -1,10 +1,18 @@
-# WMS Wave Assistant v0.7.0
+# WMS Wave Assistant v0.7.1
 
-**v0.7.0 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+**v0.7.1 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
 
-## 放单逻辑思维导图 · v0.7.0
+## v0.7.1 恢复与页面等待修复
 
-以下描述 **v0.7.0 正式版**。下载请使用 [GitHub Release v0.7.0](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.7.0)，规则不适用于旧版任务的续跑计划。
+- 已在汇波页时等待页面加载，不因 Reset 短暂消失重新导航。
+- 英文判断使用实际表单，不依赖页眉语言按钮；区分页面未就绪、中文界面和登录过期。
+- 每个区域、高低位、Box 巷道批次保存进度。刷新或重新打开助手后，点击“继续当前小节点”；已成功的小节点不会重跑。
+- 提交结果尚未返回时先接收该次结果，成功后自动进入下一批，避免重复提交。
+- 旧版任务没有保存巷道断点，无法还原旧版未记录的位置；精确小节点恢复适用于本版记录的进度。
+
+## 放单逻辑思维导图 · v0.7.1
+
+以下描述 **v0.7.1 正式版**。下载请使用 [GitHub Release v0.7.1](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.7.1)，规则不适用于旧版任务的续跑计划。
 
 ### 首波、尾波与 Flex
 
@@ -130,7 +138,7 @@ mindmap
       默认不按查询次数频繁刷新
       查询超时有限重试，保留登录信息
       重新开始建立新任务，保留台账
-      继续上次任务沿用原计划和大阶段进度
+      继续当前小节点，跳过已完成区域和巷道批次
 ```
 
 </details>
@@ -147,7 +155,7 @@ mindmap
 
 ## 开始
 
-关闭旧版，运行 v0.7.0并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
+关闭旧版，运行 v0.7.1并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
 首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
@@ -194,7 +202,7 @@ Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道�
 
 ## Español
 
-Versión oficial v0.7.0. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
+Versión oficial v0.7.1. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
 
 Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 
