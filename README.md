@@ -1,4 +1,4 @@
-# WMS Wave Assistant v0.5.1-test
+# WMS Wave Assistant v0.5.2-test
 
 三波自动流程测试版。只提供 GitHub Actions 测试包，尚未发布正式 Release。
 
@@ -52,5 +52,8 @@ Windows x64，需 Microsoft Edge WebView2 Runtime。EXE 自带 Python 和 Chromi
 
 本机数据默认 ~/.wms-wave-assistant；分发包不含登录凭据、波次台账或仓库数据。
 
-## 查询恢复（v0.5.1-test）
+## 查询恢复（v0.5.2-test）
 默认每 40 次成功查询清理 HTTP 缓存并刷新，可设为 0 关闭或调整到 1–1000。查询超时/结果不稳定最多重试两次：先刷新，再重新打开页面；恢复后核对账号仓库并重设全部筛选。保留 Cookie、登录存储和台账。登录失效、定位歧义和业务异常直接暂停。恢复本身失败也暂停。汇波和取消写入不重试，未核验意图禁止自动恢复。
+
+## v0.5.2-test 查询一致性修正
+Reset、切换类型页签和 Search 之间等待请求结束；Search 后等待响应正文、页面网络空闲、加载状态消失，再读取稳定的 Total package。校验 Package quantity 实际输入值。页面后台请求始终繁忙则超时暂停，不接受旧数字。保留提交前数量变化保护。Home 启动路由打断深链时，转用可见菜单导航。
