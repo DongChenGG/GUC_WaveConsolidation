@@ -1,4 +1,4 @@
-# WMS Wave Assistant v0.4.2-test
+# WMS Wave Assistant v0.4.3-test
 
 Windows 桌面测试版 / Versión de prueba para Windows。仅通过 GitHub Actions Artifacts 提供测试包；用户确认发布后才创建 Release。
 
@@ -43,3 +43,12 @@ GitHub Actions 使用 Windows 构建 EXE，运行规则、模拟浏览器、语�
 ## v0.4.1-test
 
 修复 Select pick strategy 标题与下拉占位文字同名导致的严格定位冲突。按弹窗标题定位，并通过策略下拉框精确选项选择，核对选择后再选 Not Operated 单选项和最终 OK。仅供用户测试，未发布 Release。
+
+
+## v0.4.3-test
+- WMS 必须使用 English；助手保留中文/西语，首页明确提示。
+- 顺序：暂存爆品（人工）→ Clean-up Single → Clean-up Multis → 核验剩余 → 取消暂存（人工）→ Top-selling。
+- 默认货架按完整范围一次查询、一次汇波：Pallet 124–131，Box 130–179，Bin 178–191（含完整混合边界巷道）。Zone Info Include 与对应 Virtual zone Totally included 同时筛选取交集；L/H 分开。混区 Virtual zone 保持 Include。
+- 旧本机阶段配置首次升级自动迁移为完整范围；阶段内部 ID 保留以兼容记录，显示步骤按新顺序排列。
+- 点击正式汇波不再弹第二次确认。阶段成功结束后可直接点“下一个”执行下一阶段（不自动连跑）；人工节点显示操作提示，未知提交仍锁定。
+- 未发布 Release，仅提供 Actions 测试包。
