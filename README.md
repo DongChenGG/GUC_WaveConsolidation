@@ -1,60 +1,60 @@
-# WMS Wave Assistant v0.6.1
+# WMS Wave Assistant v0.7.0-test
 
-Windows x64 桌面放单助手，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Microsoft Edge WebView2 Runtime。
+**测试版，不是正式发布。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
 
-## 使用
+## 开始
 
-关闭旧版，下载并运行新 EXE，登录 WMS，并将 **WMS 网页切换为 English**。
+关闭旧版，运行测试版并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
-选择首波、次波或尾波：
-- **运行所选节点**：勾选这次要执行的阶段，按原时间线顺序运行；结束旧本机流程，备份台账并保留已有波次。
-- **继续上次任务**：沿用旧轮次、策略和进度。
-- **停止后续操作**：停止后续提交；已提交但结果不明的操作保留记录，避免重复提交。
+首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
-已有未决提交会先检查结果；运行所选节点不会自动取消未选取消节点的历史波次。导出台账会在界面显示保存路径。
+## 首波
 
-## 三波顺序
+1. 按区域、L/H 释放 Top-selling，查询目标尽量接近且不超过 1500 包（6–999 范围内，从 100 起调整下限）。
+2. 锁定剩余爆品（全仓 One item only，6–999）。
+3. 锁定 Single（全仓 One item only，不限制 Package quantity）。
+4. 分区、L/H 释放 Multis，使用 All + Clean-up Multis 合并三种类型。
+5. 解除本程序记录的 Single 锁定。
+6. 分区、L/H 释放 Single，Package quantity **1–4**。
+7. 解除本程序记录的爆品锁定，结束。**不查询剩余包裹。**
 
-- 首波：暂存爆品 6–999 → 暂存剩余 Single → Multis → 取消 Single 暂存 → Single 1–3 → 取消爆品暂存 → 尽量接近且不主动超过 2000 包的 Top-selling。
-- 次波：暂存爆品 → Single 1–5 → Multis，爆品留存。
-- 尾波：暂存爆品 → Single 1–5 → Multis → 取消爆品暂存 → Top-selling 6–999。
+1500 是查询预算，不是 WMS 实际生成数量的精确承诺；动态订单和策略过滤会导致差异。低于释放门槛或超过剩余预算的批次留置，不为了凑数循环追单。
 
-正常释放分 Ground、Pallet L/H、Box L/H、Bin L/H；Multis 另外处理混区。全仓兜底保留分类及本轮数量范围，每类只执行一次。最终记录剩余订单，不循环追逐新订单。超过 999 的组单独记录。
+## 尾波
 
-## v0.6.1 更新
+解除本程序记录的已有爆品锁定 → Top-selling 6–999 → 解除已有 Single 锁定 → Single（One item only，**Package quantity 留空**）→ Multis → 查询并记录剩余包裹后结束。
 
-- 每个执行阶段显示分区、巷道与动作子节点，包括查询、提交、等待新波次、完成、留置和暂停；运行指示与计时持续更新。日志记录每次查询耗时。
-- 整区不逐个点击巷道，只选择虚拟区。Box 部分范围仍从三个完整巷道开始，低于门槛逐个扩展；Pallet/Bin 直接整区 L/H。单区 Totally included，混区 Include。
-- **所有释放批次，包括尾批与全仓兜底，Search 后至少 30 包才提交**，配置更高时采用更高值。不足则扩展 Box 或留置。用于隔离订单的暂存不受释放门槛限制。
-- **查询门槛不等于实际波次大小保证**：WMS 动态分配或策略过滤后实际数量可能更少，程序记录真实数量，不自动取消已生成的释放波次。
-- 取消暂存确认 Canceled 后继续，不再反复查询等待包裹数相等。
-- 回执使用单独标签页，每轮基线仅首次读取，后续复用；不因数量差异阻断。默认关闭定期刷新，查询超时可清理 HTTP 缓存恢复，保留登录信息。
+尾波的 Single 不按件数排除爆品；按照用户指定的先 Top-selling 后 Single 顺序运行。新到订单可能在后续节点被选中。
 
-## 等待与记录
+## Flex 自选放单
 
-页面查询通常上限 30 秒；生成回执、取消状态上限各 120 秒。固定界面等待和 WMS 处理时间仍存在，未承诺生产环境耗时。每次最终 OK 只提交一次。程序匹配当前账号、仓库的新 wave number；同一账号请勿同时在另一个窗口创建或取消波次。
+固定首波/尾波的自选节点功能移到 Flex：
+- 锁定 / 解除锁定：全仓锁爆品、锁 Single、解除已记录的爆品或 Single 锁定，按界面显示顺序执行。
+- 释放区域：Top-selling / Single / Multis 各自可选 Ground、Pallet L/H、Box L/H、Bin L/H，共 21 个独立节点。
+- Top-selling 使用 6–999；Single 使用 1–5；Multis 使用 All + Clean-up Multis。
+- **只处理勾选区域，不自动进行全仓兜底或剩余核验。** 无选项时不能启动。
+- 每个释放区域可设置提交批次上限，0 不限；一次提交可能生成多个波次。达到后进入下个所选区域。
+- 快捷按钮只选择释放区域，不自动附加锁单或解锁。订单仍处于锁定状态时，需要明确选择对应解锁动作。
+- 锁 Single 没有数量范围，可能包含未隔离的爆品；锁定顺序为先爆品后 Single。锁定和解除同时勾选会按顺序都执行。
 
-自动取消仅处理本机台账中、当前账号与仓库的暂存波次。失败或结果不明时保留 pending，不把未知结果视为成功。数据默认保存在 `~/.wms-wave-assistant`；分发包不包含登录凭据或台账。
+## Box 先大后小查询
+
+每个 Box L/H、类型先查询整区（Zone Info 留空，只选虚拟区）。总量少于 30 时留置；稀疏且达到门槛时整区释放。总量大时按总量估算分组，密集区保持至少配置的完整巷道数（默认 3）。局部不足 30 时成倍扩大范围，不再一次增加一个巷道。每个范围的实际 Search 数量才用于提交判断；估算不作为包裹分配保证。
+
+Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道，通过虚拟区取交集。单区域 Totally included，混区 Include。释放至少 30 包（配置更高时遵守更高值），暂存隔离不受该门槛限制。
+
+首波/尾波每类分区释放后保留分类和该阶段数量范围做一次全仓兜底；Flex 不进行范围外兜底。实际 WMS 波次可能小于查询数，记录差异但不据此重复提交。
+
+## 等待、恢复和记录
+
+实时阶段、区域/巷道、查询、提交、回执等待和用时持续显示。回执使用独立标签页，默认不定期刷新。查询超时有界恢复；已提交但结果未知保留 pending。取消只操作本机台账中、当前账号与仓库的暂存波次。数据默认位于 `~/.wms-wave-assistant`，更新不删除台账。导出台账按钮显示实际保存路径。
 
 ## Español
 
-Cierre la versión anterior, ejecute el EXE e inicie sesión. WMS debe estar en **English**; el asistente puede usar Español. Elija Primera, Segunda o Final y pulse **Iniciar desde el paso 0**, o **Continuar tarea anterior** para conservar el progreso.
+Versión de prueba. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
 
-Cada etapa muestra zona/pasillos, acción y tiempo de espera. Las zonas completas no seleccionan pasillos individualmente; solo Box amplía lotes. Se requieren al menos 30 paquetes en la consulta para liberar, incluso en la pasada final. Las reservas de aislamiento están exentas. WMS puede generar menos paquetes que los consultados; se registra el resultado real. Los pendientes se registran al terminar sin repetir indefinidamente. Tras confirmar una cancelación, el proceso continúa sin comparar el número de paquetes devueltos.
+Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 
-## 构建与验证
+## 构建
 
-安装 `requirements.txt` 后运行 `python run.py`。Windows 构建运行 `python build.py`，包含单元测试、隔离浏览器测试、打包 Chromium 与桌面窗口测试。
-
-本版本没有在生产 WMS 创建或取消测试波次；自动化回归测试不替代生产验收。定时配置仍为程序运行时提醒，不是无人值守启动三波。
-
-
-## v0.6.1 节点组合执行
-
-首波、次波、尾波均支持逐项勾选。未选节点明确显示“未选，跳过”，不会自动补回 Multis。快捷“仅 Single”选择当前场景的取消 Single 暂存（若存在）、Single 和剩余检查；“仅 Top-selling”选择取消爆品暂存、Top-selling 和剩余检查，次波不提供爆品释放。
-
-“每个释放节点最多汇波批次”设为 3，表示每个选中的 Single / Multis / Top-selling 节点成功提交 3 批后转入下一个所选节点；0 不限。它不是 WMS 的系统容量配置，也不是包裹数或生成波次个数限制（一次提交可能生成多个波次）。暂存及取消不计入释放批次。
-
-新任务保存所选节点和上限；续跑保留这些设置及已提交批次数。原来停在 Multis 时，可改选“仅 Single”后运行所选节点。已有未决提交仍先自动检查结果，不能跳过未知提交导致重复操作。未选取消节点时，对应暂存订单仍留在 WMS 中。
-
-Español: seleccione las etapas o use Solo Single / Solo Top-selling. Ejecutar selección crea una ronda nueva sin repetir etapas no seleccionadas. El máximo se aplica a envíos exitosos por etapa de liberación; 0 significa sin límite. Continuar conserva selección y contador. Las reservas requieren su cancelación antes de liberarse.
+安装 requirements.txt 后用 `python run.py` 启动源码桌面版。Windows x64 运行 `python build.py`：回归测试 → 打包 EXE → Chromium / 桌面自检。生产 WMS 创建/取消测试未执行。程序内时间配置仍为提醒，不是无人值守定时启动。
