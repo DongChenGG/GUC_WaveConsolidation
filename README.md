@@ -1,6 +1,14 @@
-# WMS Wave Assistant v0.8.0
+# WMS Wave Assistant v0.8.1
 
-**v0.8.0 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+**v0.8.1 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+
+## v0.8.1 更新
+
+- 取消悬浮监控与托盘隐藏；关闭主窗口真正退出。Windows 使用进程树作业对象，异常退出时系统清理所属浏览器子进程，不影响其他浏览器。
+- 尾波直接 Top-selling → Single → Multis → 剩余核验，不自动解除旧锁。
+- 尾波所有查询（包括兜底和核验）固定 Outbound order created at 为美东昨日 12:00 至今日 12:00；跨午夜续跑不改变该轮范围。旧任务续跑保留旧计划，新范围需新建尾波。
+- 波次表 Reset 后等待旧请求结束再 Search，避免迟到结果覆盖新波次。
+- Flex 同时勾选解锁与锁定时先解除所选旧锁；锁定无可用包裹明确显示未创建，并提示可能的 Single 锁占用。不会自动解除未勾选的锁。
 
 ## 台账复盘修复
 
@@ -11,15 +19,13 @@
 - 爆品先查 6–999，全量在预算内时省去逐级门槛试探。
 - 查询 Total package 与实际成波数量偏差仍需现场核对；本版不保证实际波次恰好达到目标或最低包裹数。
 
-## v0.8.0 新功能
+## v0.8.1 新功能
 
 - Flex 每个释放区域可设置目标包裹数：0 不限，30–1000000 为目标。按实际波次累计，暂停后保留进度；超过余额的范围会二分巷道，无法再拆则留置。Ground 无巷道可拆。实时订单变化可能使实际数量超过目标。
-- 黑底、青红错位的原创 W 图标，用于 EXE 和托盘。
-- 点击“悬浮监控”或最小化工作台进入置顶小窗。显示当前节点、目标、已放和剩余；支持暂停、继续、置顶和声音开关。可收进托盘，通过托盘恢复工作台或小窗。
-- 关闭窗口收起到监控/托盘，真正退出请使用托盘的“退出”。任务暂停或完成时发送系统通知。WMS 浏览器可以最小化，但不能关闭；电脑休眠期间不能执行。
-- 本次正式版包含 v0.8.0 测试版功能及后续台账复盘修复。自动测试不等于生产 WMS 的实单验证。
+- 黑底、青红错位的原创 W 图标，用于 EXE 和工作台。
+- 本次正式版包含 v0.8.1 测试版功能及后续台账复盘修复。自动测试不等于生产 WMS 的实单验证。
 
-## v0.8.0 恢复与页面等待修复
+## v0.8.1 恢复与页面等待修复
 
 - 已在汇波页时等待页面加载，不因 Reset 短暂消失重新导航。
 - 英文判断使用实际表单，不依赖页眉语言按钮；区分页面未就绪、中文界面和登录过期。
@@ -27,9 +33,9 @@
 - 提交结果尚未返回时先接收该次结果，成功后自动进入下一批，避免重复提交。
 - 旧版任务没有保存巷道断点，无法还原旧版未记录的位置；精确小节点恢复适用于本版记录的进度。
 
-## 放单逻辑思维导图 · v0.8.0
+## 放单逻辑思维导图 · v0.8.1
 
-以下描述 **v0.8.0 正式版**。下载请使用 [GitHub Release v0.8.0](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.0)，规则不适用于旧版任务的续跑计划。
+以下描述 **v0.8.1 正式版**。下载请使用 [GitHub Release v0.8.1](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.1)，规则不适用于旧版任务的续跑计划。
 
 ### 首波、尾波与 Flex
 
@@ -64,19 +70,18 @@ mindmap
       7 取消爆品暂存并结束
         不做结束剩余核验
     尾波
-      1 取消已有爆品暂存
-      2 释放 Top-selling
+      固定美东昨日12点至今日12点
+      1 释放 Top-selling
         One item only，6–999
         正常区域、全仓兜底
         不设 1500 包预算
-      3 取消已有 Single 暂存
-      4 释放 Single
+      2 释放 Single
         One item only，件数留空
         正常区域、全仓兜底
-      5 释放 Multis
+      3 释放 Multis
         All 配合 Clean-up Multis
         正常区域、混区、全仓兜底
-      6 查询剩余并结束
+      4 查询剩余并结束
         只展示结果，不自动再开一轮
     Flex 自选
       只执行勾选节点
@@ -172,7 +177,7 @@ mindmap
 
 ## 开始
 
-关闭旧版，运行 v0.8.0并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
+关闭旧版，运行 v0.8.1并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
 首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
@@ -190,9 +195,9 @@ mindmap
 
 ## 尾波
 
-解除本程序记录的已有爆品锁定 → Top-selling 6–999 → 解除已有 Single 锁定 → Single（One item only，**Package quantity 留空**）→ Multis → 查询并记录剩余包裹后结束。
+Top-selling 6–999 → Single（One item only，**Package quantity 留空**）→ Multis → 查询并记录剩余包裹后结束。
 
-尾波的 Single 不按件数排除爆品；按照用户指定的先 Top-selling 后 Single 顺序运行。新到订单可能在后续节点被选中。
+尾波的 Single 不按件数排除爆品；按照用户指定的先 Top-selling 后 Single 顺序运行。所有查询固定在本轮保存的美东昨日中午到今日中午，截单后订单排除。已有锁不自动解除，可在 Flex 中明确选择。
 
 ## Flex 自选放单
 
@@ -203,7 +208,7 @@ mindmap
 - **只处理勾选区域，不自动进行全仓兜底或剩余核验。** 无选项时不能启动。
 - 每个释放区域可设置提交批次上限，0 不限；一次提交可能生成多个波次。达到后进入下个所选区域。
 - 快捷按钮只选择释放区域，不自动附加锁单或解锁。订单仍处于锁定状态时，需要明确选择对应解锁动作。
-- 锁 Single 没有数量范围，可能包含未隔离的爆品；锁定顺序为先爆品后 Single。锁定和解除同时勾选会按顺序都执行。
+- 锁 Single 没有数量范围，可能包含未隔离的爆品；锁定顺序为先爆品后 Single。先执行明确勾选的解锁动作，再锁爆品、锁 Single，最后释放区域。
 
 ## Box 先大后小查询
 
@@ -219,7 +224,7 @@ Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道�
 
 ## Español
 
-Versión oficial v0.8.0. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: cancelar reservas top → top → cancelar reservas Single → Single sin filtro de cantidad → Multis → pendientes.
+Versión oficial v0.8.1. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: top → Single sin filtro de cantidad → Multis → pendientes. Todas las consultas se limitan a ayer 12:00–hoy 12:00, America/New_York; no cancela reservas automáticamente.
 
 Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 

@@ -92,9 +92,9 @@
 <rect x="325" y="1431.0" width="265" height="48" rx="10" fill="#0369a1"/>
 <text x="338" y="1461.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">尾波</text>
 <rect x="625" y="1026.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1056.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">1 取消已有爆品暂存</text>
+<text x="638" y="1056.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">美东昨日12点至今日12点</text>
 <rect x="625" y="1206.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1236.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">2 释放 Top-selling</text>
+<text x="638" y="1236.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">1 释放 Top-selling</text>
 <rect x="925" y="1109.0" width="265" height="62" rx="10" fill="#475569"/>
 <text x="938" y="1134.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">One item</text>
 <text x="938" y="1157.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">only，6–999</text>
@@ -103,22 +103,22 @@
 <rect x="925" y="1296.0" width="265" height="48" rx="10" fill="#475569"/>
 <text x="938" y="1326.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">不设 1500 包预算</text>
 <rect x="625" y="1386.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1416.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">3 取消已有 Single 暂存</text>
+<text x="638" y="1416.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">不自动解除已有锁</text>
 <rect x="625" y="1521.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1551.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">4 释放 Single</text>
+<text x="638" y="1551.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">2 释放 Single</text>
 <rect x="925" y="1476.0" width="265" height="48" rx="10" fill="#475569"/>
 <text x="938" y="1506.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">One item only，件数留空</text>
 <rect x="925" y="1566.0" width="265" height="48" rx="10" fill="#475569"/>
 <text x="938" y="1596.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">正常区域、全仓兜底</text>
 <rect x="625" y="1701.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1731.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">5 释放 Multis</text>
+<text x="638" y="1731.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">3 释放 Multis</text>
 <rect x="925" y="1649.0" width="265" height="62" rx="10" fill="#475569"/>
 <text x="938" y="1674.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">All 配合 Clean-up</text>
 <text x="938" y="1697.5" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">Multis</text>
 <rect x="925" y="1746.0" width="265" height="48" rx="10" fill="#475569"/>
 <text x="938" y="1776.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">正常区域、混区、全仓兜底</text>
 <rect x="625" y="1836.0" width="265" height="48" rx="10" fill="#0f766e"/>
-<text x="638" y="1866.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">6 查询剩余并结束</text>
+<text x="638" y="1866.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">4 查询剩余并结束</text>
 <rect x="925" y="1836.0" width="265" height="48" rx="10" fill="#475569"/>
 <text x="938" y="1866.0" font-family="Arial,Microsoft YaHei,sans-serif" font-size="16" fill="white">只展示结果，不自动再开一轮</text>
 <rect x="325" y="2331.0" width="265" height="48" rx="10" fill="#0369a1"/>
