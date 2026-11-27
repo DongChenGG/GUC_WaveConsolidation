@@ -1,8 +1,14 @@
-# WMS Wave Assistant v0.8.1
+# WMS Wave Assistant v0.8.2
 
-**v0.8.1 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
+**v0.8.2 正式版。** Windows x64，中文 / Español。EXE 包含 Python 和 Chromium；桌面窗口需要 Edge WebView2 Runtime。EXE 尚未代码签名，Smart App Control 可能拦截；本次功能更新不解决签名问题。
 
-## v0.8.1 更新
+## v0.8.2 更新
+
+- 尾波时间列表先显式滚动至目标选项，再点击并等待选中值；避免直接点击屏幕外的 12 点超时。WMS 只读验证保存了 11/25/2026 12:00 PM 至 11/26/2026 12:00 PM，并执行 Search（无匹配记录）。未创建或取消生产波次。
+- Single / Top-selling 的兜底分为地堆、货架低位、货架高位三个有限批次；不再清空全部虚拟区条件，不把地堆与货架混放。无法归入这些区域的包裹留置。
+- Flex 不受 30 包门槛限制；目标 0 表示所选范围有多少放多少，指定目标从 1 包起。Box 分组仍按正常密度估算，避免小单量拆成大量小波次。首波 / 尾波保留最低门槛。
+
+## 历史更新
 
 - 取消悬浮监控与托盘隐藏；关闭主窗口真正退出。Windows 使用进程树作业对象，异常退出时系统清理所属浏览器子进程，不影响其他浏览器。
 - 尾波直接 Top-selling → Single → Multis → 剩余核验，不自动解除旧锁。
@@ -19,13 +25,13 @@
 - 爆品先查 6–999，全量在预算内时省去逐级门槛试探。
 - 查询 Total package 与实际成波数量偏差仍需现场核对；本版不保证实际波次恰好达到目标或最低包裹数。
 
-## v0.8.1 新功能
+## v0.8.2 新功能
 
-- Flex 每个释放区域可设置目标包裹数：0 不限，30–1000000 为目标。按实际波次累计，暂停后保留进度；超过余额的范围会二分巷道，无法再拆则留置。Ground 无巷道可拆。实时订单变化可能使实际数量超过目标。
+- Flex 每个释放区域可设置目标包裹数：0 不限，1–1000000 为目标。按实际波次累计，暂停后保留进度；超过余额的范围会二分巷道，无法再拆则留置。Ground 无巷道可拆。实时订单变化可能使实际数量超过目标。
 - 黑底、青红错位的原创 W 图标，用于 EXE 和工作台。
-- 本次正式版包含 v0.8.1 测试版功能及后续台账复盘修复。自动测试不等于生产 WMS 的实单验证。
+- 本次正式版包含 v0.8.2 测试版功能及后续台账复盘修复。自动测试不等于生产 WMS 的实单验证。
 
-## v0.8.1 恢复与页面等待修复
+## v0.8.2 恢复与页面等待修复
 
 - 已在汇波页时等待页面加载，不因 Reset 短暂消失重新导航。
 - 英文判断使用实际表单，不依赖页眉语言按钮；区分页面未就绪、中文界面和登录过期。
@@ -33,9 +39,9 @@
 - 提交结果尚未返回时先接收该次结果，成功后自动进入下一批，避免重复提交。
 - 旧版任务没有保存巷道断点，无法还原旧版未记录的位置；精确小节点恢复适用于本版记录的进度。
 
-## 放单逻辑思维导图 · v0.8.1
+## 放单逻辑思维导图 · v0.8.2
 
-以下描述 **v0.8.1 正式版**。下载请使用 [GitHub Release v0.8.1](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.1)，规则不适用于旧版任务的续跑计划。
+以下描述 **v0.8.2 正式版**。下载请使用 [GitHub Release v0.8.2](https://github.com/DongChenGG/GUC_WaveConsolidation/releases/tag/v0.8.2)，规则不适用于旧版任务的续跑计划。
 
 ### 首波、尾波与 Flex
 
@@ -66,18 +72,18 @@ mindmap
       5 取消 Single 暂存
       6 释放 Single
         One item only，1–4
-        正常区域、全仓兜底
+        正常区域、地堆与货架分开兜底
       7 取消爆品暂存并结束
         不做结束剩余核验
     尾波
       固定美东昨日12点至今日12点
       1 释放 Top-selling
         One item only，6–999
-        正常区域、全仓兜底
+        正常区域、地堆与货架分开兜底
         不设 1500 包预算
       2 释放 Single
         One item only，件数留空
-        正常区域、全仓兜底
+        正常区域、地堆与货架分开兜底
       3 释放 Multis
         All 配合 Clean-up Multis
         正常区域、混区、全仓兜底
@@ -140,9 +146,9 @@ mindmap
       地堆加货架混区，L/H 分开
     数量与兜底
       Search 后 Total package 决定是否提交
-      正常释放至少 30 包，可设置更高
+      首波/尾波至少 30 包；Flex 从 1 包释放
       暂存隔离不受 30 包限制
-      全仓兜底清除区域、巷道与高低位限制
+      Multis 全仓兜底；Single/爆品地堆与货架 L/H 分开
         保留类别、策略和当前数量范围
         仍受释放门槛及首波爆品剩余额度约束
         每类一次，不无限追赶新订单
@@ -167,7 +173,7 @@ mindmap
 
 **阅读边界：**
 
-- 首波／尾波的三种类型都会先分区域与高低位；只有后面的全仓兜底放开这些限制。Flex 不放开到未勾选区域。
+- 首波／尾波的三种类型都会先分区域与高低位；Multis 最后的全仓兜底放开这些限制；Single/Top-selling 的兜底仍分地堆、货架低位和货架高位。Flex 不放开到未勾选区域。
 - “至少 30 包”限制的是本次查询量，不保证 WMS 拆出的每个 wave 都至少 30 包；首波 1500 也只是查询预算，动态订单可能使实际数量不同。
 - 尾波 Single 件数留空，因此可能包含未放出的或新进入的爆品；Flex Single 当前固定为 1–5。
 - 文中的“释放”指选择策略、Not Operated、最终 OK 并取得新增波次回执，不包含随后在 Wave Confirmation 上再点另一道确认按钮。
@@ -177,7 +183,7 @@ mindmap
 
 ## 开始
 
-关闭旧版，运行 v0.8.1并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
+关闭旧版，运行 v0.8.2并登录 WMS。**WMS 网页必须切换为 English**，助手本身可用中文或西语。运行中不要使用同一账号在其他窗口创建或取消波次。
 
 首波和尾波现在是固定流程。点击“开始运行”新建一轮并保留已有波次与台账；点击“继续上次任务”继续原版本的计划和进度（包括旧次波）。新任务不再提供次波。未决提交先核对结果，避免重复提交。
 
@@ -212,11 +218,11 @@ Top-selling 6–999 → Single（One item only，**Package quantity 留空**）�
 
 ## Box 先大后小查询
 
-每个 Box L/H、类型先查询整区（Zone Info 留空，只选虚拟区）。总量少于 30 时留置；稀疏且达到门槛时整区释放。总量大时按总量估算分组，密集区保持至少配置的完整巷道数（默认 3）。局部不足 30 时成倍扩大范围，不再一次增加一个巷道。每个范围的实际 Search 数量才用于提交判断；估算不作为包裹分配保证。
+每个 Box L/H、类型先查询整区（Zone Info 留空，只选虚拟区）。首波/尾波总量少于 30 时留置；Flex 总量大于 0 即可释放；稀疏且达到门槛时整区释放。总量大时按总量估算分组，密集区保持至少配置的完整巷道数（默认 3）。局部不足 30 时成倍扩大范围，不再一次增加一个巷道。每个范围的实际 Search 数量才用于提交判断；估算不作为包裹分配保证。
 
-Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道，通过虚拟区取交集。单区域 Totally included，混区 Include。释放至少 30 包（配置更高时遵守更高值），暂存隔离不受该门槛限制。
+Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道，通过虚拟区取交集。单区域 Totally included，混区 Include。首波/尾波释放至少 30 包（配置更高时遵守更高值），Flex 和暂存隔离不受该门槛限制。
 
-首波/尾波每类分区释放后保留分类和该阶段数量范围做一次全仓兜底；Flex 不进行范围外兜底。实际 WMS 波次可能小于查询数，记录差异但不据此重复提交。
+首波/尾波分区释放后保留分类和数量范围：Multis 做一次全仓兜底；Single/Top-selling 分地堆、货架低位、货架高位各兜底一次；Flex 不进行范围外兜底。实际 WMS 波次可能小于查询数，记录差异但不据此重复提交。
 
 ## 等待、恢复和记录
 
@@ -224,9 +230,9 @@ Pallet / Bin 直接整区 L/H。Box 边界使用 130–131 和 178–179 巷道�
 
 ## Español
 
-Versión oficial v0.8.1. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: top → Single sin filtro de cantidad → Multis → pendientes. Todas las consultas se limitan a ayer 12:00–hoy 12:00, America/New_York; no cancela reservas automáticamente.
+Versión oficial v0.8.2. WMS debe estar en **English**. Primera: top hasta 1500 → reservar top → reservar Single → Multis → cancelar reserva Single → Single 1–4 → cancelar reserva top; sin auditoría final. Final: top → Single sin filtro de cantidad → Multis → pendientes. Todas las consultas se limitan a ayer 12:00–hoy 12:00, America/New_York; no cancela reservas automáticamente.
 
-Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Mínimo de consulta: 30. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
+Flex permite seleccionar reservas y zonas Ground / Pallet / Box / Bin, L/H, para Top-selling (6–999), Single (1–5) y Multis. Solo ejecuta las zonas marcadas, sin pasada global. Box consulta primero toda la zona, luego divide por volumen y amplía por duplicación cuando faltan paquetes. Flex libera desde 1 paquete; objetivo 0 sin límite. Single/Top nunca mezclan Ground con estanterías, tampoco en la pasada final. Continuar conserva el plan anterior; iniciar usa el nuevo plan.
 
 ## 构建
 
